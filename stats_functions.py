@@ -51,7 +51,11 @@ def s_luminosity(data):
     """
     plt.cla()
     d = data[['P. Habitable Class', 'S. Luminosity (SU)']]
-    sns.swarmplot(x='P. Habitable Class', y='S. Luminosity (SU)', data=d)
+    sns.swarmplot(x='P. Habitable Class', y='S. Luminosity (SU)',
+                  order=planets, size=1, data=d)
+    plt.xticks(rotation=-20)
+    plt.title('Distribution of Number of Habitable' +
+              ' Planets per Class vs Parent Star Luminosity')
     plt.savefig('luminiosity.png')
 
 
@@ -65,21 +69,21 @@ def s_age(data):
     """
     """
     plt.cla()
-
-
-def s_appar_mag(data):
-    """
-    """
-    plt.cla()
+    sns.swarmplot(x='P. Habitable Class', y='S. Age (Gyrs)',
+                  order=planets, data=data)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable' +
+              ' Exoplanets per Class vs Age of Parent Star')
+    plt.savefig('s_age.png')
 
 
 def main():
     """
     """
     data = pd.read_csv('phl_hec_all_confirmed.csv')
-    # s_luminosity(data)
     s_type(data)
     s_mass(data)
+    s_luminosity(data)
 
 
 if __name__ == '__main__':
