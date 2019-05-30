@@ -73,6 +73,43 @@ def s_appar_mag(data):
     plt.cla()
 
 
+def s_ra(data):
+    """
+    """
+    plt.cla()
+    sns.swarmplot(x='P. Habitable Class', y='S. RA (hrs)', data=data,
+                  order=planets, size=3)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable Planets per Class' +
+              'Parent Star Right Ascension')
+    plt.savefig('s_ra.png', bbox_inches='tight')
+
+
+def s_dec(data):
+    """
+    """
+    plt.cla()
+    d = data[(data['S. DEC (deg)'] > -65) & (data['S. DEC (deg)'] < 55)]
+    sns.swarmplot(x='P. Habitable Class', y='S. DEC (deg)', data=d,
+                  order=planets, size=3)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable Planets per Class' +
+              'Parent Star Declination')
+    plt.savefig('s_dec.png', bbox_inches='tight')
+
+
+def s_mag_from_planet(data):
+    """
+    """
+    plt.cla()
+
+
+def s_size_from_planet(data):
+    """
+    """
+    plt.cla()
+
+
 def main():
     """
     """
