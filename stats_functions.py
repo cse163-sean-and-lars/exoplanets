@@ -2,6 +2,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import time
 sns.set()
 
 planets = ['non-habitable', 'hypopsychroplanet', 'psychroplanet', 'mesoplanet',
@@ -10,6 +11,9 @@ planets = ['non-habitable', 'hypopsychroplanet', 'psychroplanet', 'mesoplanet',
 
 def s_type(data):
     """
+    Plot the number of habitable exoplanets for differen star types from the
+    data. In order to avoid severely cluttered axes, only star types with one
+    or more habitable exoplanet are included.
     """
     plt.cla()
     d = data[data['P. Habitable'] != 0
@@ -27,8 +31,8 @@ def s_mass(data):
     """
     plt.cla()
     sns.swarmplot(x='P. Habitable Class', y='S. Mass (SU)',
-                  order=planets, data=data)
-    plt.xticks(rotation=-20)
+                  order=planets, size=3, data=data)
+    plt.xticks(rotation=-15)
     plt.title('Distribution of Number of Habitable' +
               ' Planets per Class vs Parent Star Mass')
     plt.savefig('s_mass.png', bbox_inches='tight')
@@ -38,12 +42,44 @@ def s_radius(data):
     """
     """
     plt.cla()
+    sns.swarmplot(x='P. Habitable Class', y='S. Radius (SU)',
+                  order=planets, size=3, data=data)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable' +
+              ' Exoplanets per Class vs Parent Star Radius')
+    plt.savefig('s_radius.png', bbox_inches='tight')
+
+
+def s_mass_vs_radius(data):
+    """
+    """
+    plt.cla()
+    sns.relplot(x='S. Mass (SU)', y='S. Radius (SU)',
+                hue='P. Habitable Class', data=data)
+    plt.xticks(rotation=-15)
+    plt.title('Star Mass vs Star Radius for Stars with Known Exoplanets')
+    plt.savefig('s_mass_vs_radius_all.png', bbox_inches='tight')
+
+    plt.cla()
+    d = data[data['P. Habitable'] == 1]
+    sns.relplot(x='S. Mass (SU)', y='S. Radius (SU)',
+                hue='P. Habitable Class', data=d)
+    plt.xticks(rotation=-15)
+    plt.title('Star Mass vs Star Radius for Stars' +
+              'with Known Habitable Exoplanets')
+    plt.savefig('s_mass_vs_radius_habitable.png', bbox_inches='tight')
 
 
 def s_teff(data):
     """
     """
     plt.cla()
+    sns.swarmplot(x='P. Habitable Class', y='S. Teff (K)',
+                  order=planets, size=3, data=data)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable' +
+              ' Exoplanets per Class vs Parent Star Effective Temperature')
+    plt.savefig('s_teff.png', bbox_inches='tight')
 
 
 def s_luminosity(data):
@@ -52,17 +88,48 @@ def s_luminosity(data):
     plt.cla()
     d = data[['P. Habitable Class', 'S. Luminosity (SU)']]
     sns.swarmplot(x='P. Habitable Class', y='S. Luminosity (SU)',
-                  order=planets, size=1, data=d)
-    plt.xticks(rotation=-20)
+                  order=planets, size=3, data=d)
+    plt.xticks(rotation=-15)
     plt.title('Distribution of Number of Habitable' +
               ' Planets per Class vs Parent Star Luminosity')
-    plt.savefig('luminiosity.png')
+    plt.savefig('s_luminiosity.png', bbox_inches='tight')
 
 
 def s_FeH(data):
     """
     """
+    # plot unaltered data
     plt.cla()
+    sns.swarmplot(x='P. Habitable Class', y='S. [Fe/H]',
+                  order=planets, size=3, data=data)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable' +
+              ' Planets per Class vs Parent Star Iron to Hydrogen Ratio')
+    plt.savefig('s_FeH.png', bbox_inches='tight')
+
+    # plot with outliers removed
+    plt.cla()
+    d = data[['S. [Fe/H]', 'P. Habitable Class'
+              ]][data['S. [Fe/H]'] > -5]
+    sns.swarmplot(x='P. Habitable Class', y='S. [Fe/H]',
+                  order=planets, size=3, data=d)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable' +
+              ' Planets per Class vs Parent Star Iron to Hydrogen Ratio' +
+              ' with Outlying Points Removed')
+    plt.savefig('s_FeH_no_outliers.png', bbox_inches='tight')
+
+    # plot with only habitable planets
+    plt.cla()
+    d = data[['S. [Fe/H]', 'P. Habitable Class'
+              ]][data['P. Habitable'] == 1]
+    sns.swarmplot(x='P. Habitable Class', y='S. [Fe/H]',
+                  order=planets, size=3, data=d)
+    plt.xticks(rotation=-15)
+    plt.title('Distribution of Number of Habitable' +
+              ' Planets per Habitable Class vs Parent Star' +
+              ' Iron to Hydrogen Ratio')
+    plt.savefig('s_FeH_only_habitable.png', bbox_inches='tight')
 
 
 def s_age(data):
@@ -74,7 +141,7 @@ def s_age(data):
     plt.xticks(rotation=-15)
     plt.title('Distribution of Number of Habitable' +
               ' Exoplanets per Class vs Age of Parent Star')
-    plt.savefig('s_age.png')
+    plt.savefig('s_age.png', bbox_inches='tight')
 
 
 def s_ra(data):
@@ -115,12 +182,35 @@ def s_size_from_planet(data):
 
 
 def main():
-    """
-    """
     data = pd.read_csv('phl_hec_all_confirmed.csv')
+    start_time = time.time()
     s_type(data)
+    print('finished type!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
     s_mass(data)
+    print('finished mass!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
+    s_teff(data)
+    print('finished teff!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
+    s_FeH(data)
+    print('finished [Fe/H]!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
+    s_age(data)
+    print('finished age!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
+    s_ra(data)
+    print('finished ra!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
+    s_dec(data)
+    print('finished dec!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
+    s_radius(data)
+    print('finished radius!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
     s_luminosity(data)
+    print('finished luminosity!   ',
+          '--- %s seconds ---' % (time.time() - start_time))
 
 
 if __name__ == '__main__':
