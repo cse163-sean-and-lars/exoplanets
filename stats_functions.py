@@ -184,6 +184,7 @@ def s_size_from_planet(data):
 def main():
     data = pd.read_csv('phl_hec_all_confirmed.csv')
     start_time = time.time()
+    """
     s_type(data)
     print('finished type!   ',
           '--- %s seconds ---' % (time.time() - start_time))
@@ -208,6 +209,7 @@ def main():
     s_radius(data)
     print('finished radius!   ',
           '--- %s seconds ---' % (time.time() - start_time))
+    """
     s_luminosity(data)
     print('finished luminosity!   ',
           '--- %s seconds ---' % (time.time() - start_time))
