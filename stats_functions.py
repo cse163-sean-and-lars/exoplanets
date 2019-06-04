@@ -172,13 +172,36 @@ def s_dec(data):
 def s_mag_from_planet(data):
     """
     """
+
+    # Includes uninhabitable planets
     plt.cla()
+    d = data[(data['S. Mag from Planet'] > -30) &
+             (data['S. Mag from Planet'] < -25)]
+    sns.swarmplot(x='P. Habitable Class', y='S. Mag from Planet', data=d,
+                  order=planets, size=3)
+    plt.xticks(rotation=-15)
+    plt.title('Planet Habitability in Relation to Star Magnitude from Planet')
+    plt.savefig('s_mag_from_planet_uninhabitable.png')
+
+    # Only habitable planets
+    d2 = data[data['P. Habitable Class'] != 'non-habitable']
+    sns.swarmplot(x='P. Habitable Class', y='S. Mag from Planet', data=d2,
+                  order=planets, size=3)
+    plt.xticks(rotation=-15)
+    plt.title('Planet Habitability in Relation to Star Magnitude from Planet')
+    plt.savefig('s_mag_from_planet_inhabitable.png')
 
 
 def s_size_from_planet(data):
     """
     """
     plt.cla()
+    d = data[data['S. Size from Planet (deg)'] < 3]
+    sns.swarmplot(x='P. Habitable Class', y='S. Size from Planet (deg)',
+                  data=d, order=planets, size=3)
+    plt.xticks(rotation=-15)
+    plt.title('Planet Habitability in Relation to Star Size from Planet')
+    plt.savefig('s_size_from_planet.png')
 
 
 def main():
