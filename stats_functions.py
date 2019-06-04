@@ -2,6 +2,11 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
 import time
 sns.set()
 
@@ -202,6 +207,71 @@ def s_size_from_planet(data):
     plt.xticks(rotation=-15)
     plt.title('Planet Habitability in Relation to Star Size from Planet')
     plt.savefig('s_size_from_planet.png')
+
+
+def model(data, kepler_data):
+    """
+    Creates models for predicting the habitability and habitable class of
+    different exoplanets and Kepler objects based on...
+    """
+
+    filt = data.loc[:, ['P. Habitable', 'S. Mass (SU)', 'S. Radius (SU)',
+                        'S. Teff (K)', 'S. Luminosity (SU)', 'S. Age (Gyrs)',
+                        'S. RA (hrs)', 'S. DEC (deg)', 'S. Mag from Planet',
+                        'S. Size from Planet (deg)', 'P. Habitable']]
+    filt = filt.dropna()
+
+    # Models habitability based on characteristics of confirmed exoplanets
+
+    X = filt.loc[:, (filt.columns != 'P. Habitable Class') &
+                 (filt.columns != 'P. Habitable')]
+    y = filt['P. Habitable']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
+
+    model = DecisionTreeClassifier()
+    model.fit(X_train, y_train)
+
+    print('Confirmed Exoplanet Habitability Accuracy Score:')
+    print(accuracy_score(y_test, model.predict(X_test)))
+
+    # Tests previous model on all Kepler objects
+
+    kep_filt = kepler_data.loc[:, ['P. Habitable', 'P. Habitable Class',
+                                   'S. Mass (SU)', 'S. Radius (SU)',
+                                   'S. Teff (K)', 'S. Luminosity (SU)',
+                                   'S. Age (Gyrs)', 'S. RA (hrs)',
+                                   'S. DEC (deg)', 'S. Mag from Planet',
+                                   'S. Size from Planet (deg)']]
+    kep_filt = kep_filt.dropna()
+    kep_filt = kep_filt[kep_filt['S. Size from Planet (deg)'] != '-']
+
+    kepler_X = kep_filt.loc[:, (kep_filt.columns != 'P. Habitable Class') &
+                            (kep_filt.columns != 'P. Habitable')]
+    kepler_y = kep_filt['P. Habitable']
+
+    print('Kepler Object Habitability Accuracy Score:')
+    print(accuracy_score(kepler_y, model.predict(kepler_X)))
+
+    # Models habitable class based on characteristics of confirmed exoplanets
+
+    y_class = filt['P. Habitable Class']
+
+    X_class_train, X_class_test, y_class_train, y_class_test = \
+        train_test_split(X, y_class, test_size=.2)
+
+    model_class = DecisionTreeClassifier()
+    model_class.fit(X_class_train, y_class_train)
+
+    print('Confirmed Exoplanet Habitable Class Accuracy Score:')
+    print(accuracy_score(y_class_test, model_class.predict(X_class_test)))
+
+    # Tests previous model on all Kepler objects
+
+    kepler_y_class = kep_filt['P. Habitable Class']
+
+    print('Kepler Object Habitable Class Accuracy Score:')
+    print(accuracy_score(kepler_y_class, model_class.predict(kepler_X)))
 
 
 def main():
