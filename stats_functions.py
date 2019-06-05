@@ -17,22 +17,25 @@ planets = ['hypopsychroplanet', 'psychroplanet', 'mesoplanet',
 def s_type(data):
     """
     Plot the number of habitable exoplanets for differen star types from the
-    data. In order to avoid severely cluttered axes, only star types with one
-    or more habitable exoplanet are included.
+    data. In order to avoid severely cluttered axes, only broad star types are
+    included, the specific types are aggregated into general type categories
     """
     plt.cla()
-    # filter the data to remove uninhabitable planets, and then groupby
-    # parent star type, summing the counts of habitable exoplanets per type
-    d = data[data['P. Habitable'] != 0
-             ].groupby('S. Type')['P. Habitable'
-                                  ].sum().reset_index(name='count')
+    # group the data by star letter classification
+    d = data[['S. Type', 'P. Habitable']].dropna()
+    types = list()
+    for star_type in d['S. Type']:
+        types.append(star_type[0])
+    d['Type'] = types
+    d = d.groupby('Type')['P. Habitable'].sum().reset_index(name='count')
     # cast groupby object to a dataframe object
     pd.DataFrame(d)
     # create a bar chart to show the data
-    sns.catplot(x='S. Type', y='count', kind='bar', ci=None, color='b', data=d)
+    sns.catplot(x='Type', y='count', kind='bar', ci=None, color='b', data=d)
     # configure the plot to make it legible
-    plt.xticks(rotation=-80)
     plt.title('Nuber of Confirmed Habitable Exoplanets per Star Type')
+    plt.xlabel('Star Class')
+    plt.ylabel('Number of Confirmed Exoplanets')
     plt.savefig('s_type.png', bbox_inches='tight')
     plt.close()
 
@@ -63,7 +66,11 @@ def s_mass(h, nh):
                   size=3, data=nh)
     # configure the plot to make it legible
     plt.title('Distribution of Number of Non-Habitable' +
-              ' Planets per Class vs Parent Star Mass')
+              ' Planets per Class vs Parent Star Mass', fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. Mass (SU)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_mass_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -94,7 +101,11 @@ def s_radius(h, nh):
                   size=3, data=nh)
     # configure the plot to make it legible
     plt.title('Distribution of Number of Non-Habitable' +
-              ' Exoplanets per Class vs Parent Star Radius')
+              ' Exoplanets per Class vs Parent Star Radius', fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. Radius (SU)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_radius_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -123,7 +134,7 @@ def s_mass_vs_radius(data, h):
                 hue='P. Habitable Class', data=h)
     # configure the plot to make it legible
     plt.title('Star Mass vs Star Radius for Stars' +
-              'with Known Habitable Exoplanets')
+              ' with Known Habitable Exoplanets')
     plt.savefig('s_mass_vs_radius_h.png', bbox_inches='tight')
     plt.close()
 
@@ -150,7 +161,12 @@ def s_teff(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. Teff (K)',
                   size=3, data=nh)
     plt.title('Distribution of Number of Non-Habitable' +
-              ' Exoplanets per Class vs Parent Star Effective Temperature')
+              ' Exoplanets per Class vs Parent Star Effective Temperature',
+              fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. Teff (K)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_teff_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -177,7 +193,11 @@ def s_luminosity(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. Luminosity (SU)',
                   size=3, data=nh)
     plt.title('Distribution of Number of Non-Habitable' +
-              ' Planets per Class vs Parent Star Luminosity')
+              ' Planets per Class vs Parent Star Luminosity', fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. Luminosity (SU)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_luminiosity_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -205,7 +225,12 @@ def s_FeH(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. [Fe/H]',
                   size=3, data=nh)
     plt.title('Distribution of Number of Non-Habitable' +
-              ' Planets per Class vs Parent Star Iron to Hydrogen Ratio')
+              ' Planets per Class vs Parent Star Iron to Hydrogen Ratio',
+              fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. [Fe/H]', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_FeH_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -232,7 +257,11 @@ def s_age(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. Age (Gyrs)',
                   size=3, data=nh)
     plt.title('Distribution of Number of Non-Habitable' +
-              ' Exoplanets per Class vs Age of Parent Star')
+              ' Exoplanets per Class vs Age of Parent Star', fontsize=20)
+    plt.xlabel('P. Habitable Class', fontsize=16)
+    plt.ylabel('S. Age (Gyrs)', fontsize=16)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     plt.savefig('s_age_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -259,7 +288,11 @@ def s_ra(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. RA (hrs)', data=nh,
                   size=3)
     plt.title('Distribution of Number of Non-Habitable Planets per Class' +
-              'vs Parent Star Right Ascension')
+              'vs Parent Star Right Ascension', fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. RA (hrs)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_ra_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -286,7 +319,11 @@ def s_dec(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. DEC (deg)', data=nh,
                   size=3)
     plt.title('Distribution of Number of Non-Habitable Planets per Class' +
-              'vs Parent Star Declination')
+              'vs Parent Star Declination', fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. DEC (deg)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.savefig('s_dec_nh.png', bbox_inches='tight')
     plt.close()
 
@@ -302,7 +339,7 @@ def s_mag_from_planet(h, nh):
                   order=planets, size=3)
     plt.xticks(rotation=-15)
     plt.title('Planet Habitability in Relation to Star Magnitude from Planet')
-    plt.savefig('s_mag_from_planet_h.png')
+    plt.savefig('s_mag_from_planet_h.png', bbox_inches='tight')
     plt.close()
 
     # plot with only non-habitable planets
@@ -310,8 +347,13 @@ def s_mag_from_planet(h, nh):
     plt.subplots(figsize=(10, 10))
     sns.swarmplot(x='P. Habitable Class', y='S. Mag from Planet', data=nh,
                   size=3)
-    plt.title('Planet Habitability in Relation to Star Magnitude from Planet')
-    plt.savefig('s_mag_from_planet_nh.png')
+    plt.title('Planet Habitability in Relation to Star Magnitude from Planet',
+              fontsize=24)
+    plt.xlabel('P. Habitable Class', fontsize=16)
+    plt.ylabel('S. Mag from Planet', fontsize=16)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.savefig('s_mag_from_planet_nh.png', bbox_inches='tight')
     plt.close()
 
 
@@ -327,7 +369,7 @@ def s_size_from_planet(h, nh):
                   data=h, order=planets, size=3)
     plt.xticks(rotation=-15)
     plt.title('Planet Habitability in Relation to Star Size from Planet')
-    plt.savefig('s_size_from_planet_h.png')
+    plt.savefig('s_size_from_planet_h.png', bbox_inches='tight')
     plt.close()
 
     # plot with only non-habitable planets
@@ -335,8 +377,13 @@ def s_size_from_planet(h, nh):
     plt.subplots(figsize=(20, 20))
     sns.swarmplot(x='P. Habitable Class', y='S. Size from Planet (deg)',
                   data=nh, size=3)
-    plt.title('Planet Habitability in Relation to Star Size from Planet')
-    plt.savefig('s_size_from_planet_nh.png')
+    plt.title('Planet Habitability in Relation to Star Size from Planet',
+              fontsize=30)
+    plt.xlabel('P. Habitable Class', fontsize=24)
+    plt.ylabel('S. Size from Planet (deg)', fontsize=24)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.savefig('s_size_from_planet_nh.png', bbox_inches='tight')
     plt.close()
 
 
