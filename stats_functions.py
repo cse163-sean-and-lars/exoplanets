@@ -1,4 +1,7 @@
-# we can put the code for our stats functions in here
+# Creates swarmplots relating the habitability and habitable class of
+# confirmed exoplanets to different attributes of the stars they revolve
+# around. Also creates models for predicting the habitability and habitable
+# class of different Kepler objects based on said attirubtes.
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -390,13 +393,16 @@ def s_size_from_planet(h, nh):
 def model(data, kepler_data):
     """
     Creates models for predicting the habitability and habitable class of
-    different exoplanets and Kepler objects based on...
+    different exoplanets and Kepler objects based on characteristics of the
+    stars they revolve around. Prints accuracy scores for both models in
+    making predictions based on both confirmed exoplanets and Kepler objects.
     """
 
-    filt = data.loc[:, ['P. Habitable', 'S. Mass (SU)', 'S. Radius (SU)',
-                        'S. Teff (K)', 'S. Luminosity (SU)', 'S. Age (Gyrs)',
-                        'S. RA (hrs)', 'S. DEC (deg)', 'S. Mag from Planet',
-                        'S. Size from Planet (deg)', 'P. Habitable']]
+    filt = data.loc[:, ['S. Mass (SU)', 'S. Radius (SU)', 'S. Teff (K)',
+                        'S. Luminosity (SU)', 'S. Age (Gyrs)', 'S. RA (hrs)',
+                        'S. DEC (deg)', 'S. Mag from Planet',
+                        'S. Size from Planet (deg)', 'P. Habitable',
+                        'P. Habitable Class']]
     filt = filt.dropna()
 
     # Models habitability based on characteristics of confirmed exoplanets
@@ -415,12 +421,12 @@ def model(data, kepler_data):
 
     # Tests previous model on all Kepler objects
 
-    kep_filt = kepler_data.loc[:, ['P. Habitable', 'P. Habitable Class',
-                                   'S. Mass (SU)', 'S. Radius (SU)',
+    kep_filt = kepler_data.loc[:, ['S. Mass (SU)', 'S. Radius (SU)',
                                    'S. Teff (K)', 'S. Luminosity (SU)',
                                    'S. Age (Gyrs)', 'S. RA (hrs)',
                                    'S. DEC (deg)', 'S. Mag from Planet',
-                                   'S. Size from Planet (deg)']]
+                                   'S. Size from Planet (deg)',
+                                   'P. Habitable', 'P. Habitable Class']]
     kep_filt = kep_filt.dropna()
     kep_filt = kep_filt[kep_filt['S. Size from Planet (deg)'] != '-']
 
@@ -455,6 +461,7 @@ def model(data, kepler_data):
 def main():
     # read in the confirmed exoplanet data
     data = pd.read_csv('phl_hec_all_confirmed.csv')
+    kepler_data = pd.read_csv('phl_hec_all_kepler.csv')
 
     # filter data into habitable (h) and non-habitable (nh) sets
     nh = data[data['P. Habitable Class'] == 'non-habitable']
@@ -502,7 +509,9 @@ def main():
           '--- %s seconds ---' % (time.time() - start_time))
     s_size_from_planet(h, nh)
     print('finished size!   ',
-          '--- %s seconds ---' % (time.time() - start_time))
+          '--- %s seconds ---\n' % (time.time() - start_time))
+
+    model(data, kepler_data)
 
 
 if __name__ == '__main__':
