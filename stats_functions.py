@@ -461,6 +461,9 @@ def main():
     h = data[data['P. Habitable Class'] != 'non-habitable']
 
     # start a timer for the sake of seeing how long each plot takes
+    # some take a long time, this is due to overlapping values in the swarmplot
+    # to stop this from happening we need to make the axis larger, but kind of
+    # unreasonably wider, so we crop it for the sake of legibility.
     start_time = time.time()
 
     # plot each relationship
