@@ -278,7 +278,7 @@ def s_ra(h, nh):
                   order=planets, size=3)
     plt.xticks(rotation=-15)
     plt.title('Distribution of Number of Habitable Planets per Class' +
-              'vs Parent Star Right Ascension')
+              ' vs Parent Star Right Ascension')
     plt.savefig('s_ra_h.png', bbox_inches='tight')
     plt.close()
 
@@ -288,7 +288,7 @@ def s_ra(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. RA (hrs)', data=nh,
                   size=3)
     plt.title('Distribution of Number of Non-Habitable Planets per Class' +
-              'vs Parent Star Right Ascension', fontsize=30)
+              ' vs Parent Star Right Ascension', fontsize=30)
     plt.xlabel('P. Habitable Class', fontsize=24)
     plt.ylabel('S. RA (hrs)', fontsize=24)
     plt.xticks(fontsize=16)
@@ -309,7 +309,7 @@ def s_dec(h, nh):
                   order=planets, size=3)
     plt.xticks(rotation=-15)
     plt.title('Distribution of Number of Habitable Planets per Class' +
-              'vs Parent Star Declination')
+              ' vs Parent Star Declination')
     plt.savefig('s_dec_h.png', bbox_inches='tight')
     plt.close()
 
@@ -319,7 +319,7 @@ def s_dec(h, nh):
     sns.swarmplot(x='P. Habitable Class', y='S. DEC (deg)', data=nh,
                   size=3)
     plt.title('Distribution of Number of Non-Habitable Planets per Class' +
-              'vs Parent Star Declination', fontsize=30)
+              ' vs Parent Star Declination', fontsize=30)
     plt.xlabel('P. Habitable Class', fontsize=24)
     plt.ylabel('S. DEC (deg)', fontsize=24)
     plt.xticks(fontsize=16)
