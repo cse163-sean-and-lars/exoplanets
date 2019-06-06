@@ -422,9 +422,8 @@ def model(data, kepler_data):
 
     filt = data.loc[:, ['S. Mass (SU)', 'S. Radius (SU)', 'S. Teff (K)',
                         'S. Luminosity (SU)', 'S. [Fe/H]', 'S. Age (Gyrs)',
-                        'S. RA (hrs)', 'S. DEC (deg)', 'S. Mag from Planet',
-                        'S. Size from Planet (deg)', 'P. Habitable',
-                        'P. Habitable Class']]
+                        'S. Mag from Planet', 'S. Size from Planet (deg)',
+                        'P. Habitable', 'P. Habitable Class']]
     filt = filt.dropna()
 
     # Models habitability based on characteristics of confirmed exoplanets
@@ -443,10 +442,11 @@ def model(data, kepler_data):
 
     # Tests previous model on all Kepler objects
 
+    kep_filt = kepler_data[kepler_data['P. Confirmed'] == 0]
     kep_filt = kepler_data.loc[:, ['S. Mass (SU)', 'S. Radius (SU)',
                                    'S. Teff (K)', 'S. Luminosity (SU)',
-                                   'S. [Fe/H]', 'S. Age (Gyrs)', 'S. RA (hrs)',
-                                   'S. DEC (deg)', 'S. Mag from Planet',
+                                   'S. [Fe/H]', 'S. Age (Gyrs)',
+                                   'S. Mag from Planet',
                                    'S. Size from Planet (deg)',
                                    'P. Habitable', 'P. Habitable Class']]
     kep_filt = kep_filt.dropna()
@@ -496,6 +496,7 @@ def main():
     start_time = time.time()
 
     # plot each relationship
+
     s_type(data)
     print('finished type!   ',
           '--- %s seconds ---' % (time.time() - start_time))
