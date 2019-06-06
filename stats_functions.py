@@ -23,6 +23,7 @@ def s_type(data):
     data. In order to avoid severely cluttered axes, only broad star types are
     included, the specific types are aggregated into general type categories
     """
+    # plot habitable planets
     plt.cla()
     # group the data by star letter classification
     d = data[['S. Type', 'P. Habitable']].dropna()
@@ -33,13 +34,34 @@ def s_type(data):
     d = d.groupby('Type')['P. Habitable'].sum().reset_index(name='count')
     # cast groupby object to a dataframe object
     pd.DataFrame(d)
+    o = list(d['Type'])
     # create a bar chart to show the data
-    sns.catplot(x='Type', y='count', kind='bar', ci=None, color='b', data=d)
+    sns.catplot(x='Type', y='count', kind='bar', ci=None, color='b',
+                data=d, order=o)
     # configure the plot to make it legible
     plt.title('Nuber of Confirmed Habitable Exoplanets per Star Type')
     plt.xlabel('Star Class')
     plt.ylabel('Number of Confirmed Exoplanets')
     plt.savefig('s_type.png', bbox_inches='tight')
+    plt.close()
+
+    # plot all planets
+    plt.cla()
+    d2 = data[['S. Type']].dropna()
+    counts = dict()
+    for star_type in d2['S. Type']:
+        if star_type[0] in counts:
+            counts[star_type[0]] += 1
+        else:
+            counts[star_type[0]] = 1
+    counts_pd = pd.DataFrame(list(zip(counts.keys(), counts.values())),
+                             columns=['Type', 'Counts'])
+    sns.catplot(x='Type', y='Counts', kind='bar', ci=None, color='b',
+                data=counts_pd, order=o)
+    plt.title('Nuber of Confirmed Exoplanets per Star Type')
+    plt.xlabel('Star Class')
+    plt.ylabel('Number of Confirmed Exoplanets')
+    plt.savefig('s_type_all.png', bbox_inches='tight')
     plt.close()
 
 
