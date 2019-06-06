@@ -359,8 +359,8 @@ def model(data, kepler_data):
     """
 
     filt = data.loc[:, ['S. Mass (SU)', 'S. Radius (SU)', 'S. Teff (K)',
-                        'S. Luminosity (SU)', 'S. Age (Gyrs)', 'S. RA (hrs)',
-                        'S. DEC (deg)', 'S. Mag from Planet',
+                        'S. Luminosity (SU)', 'S. [Fe/H]', 'S. Age (Gyrs)',
+                        'S. RA (hrs)', 'S. DEC (deg)', 'S. Mag from Planet',
                         'S. Size from Planet (deg)', 'P. Habitable',
                         'P. Habitable Class']]
     filt = filt.dropna()
@@ -383,7 +383,7 @@ def model(data, kepler_data):
 
     kep_filt = kepler_data.loc[:, ['S. Mass (SU)', 'S. Radius (SU)',
                                    'S. Teff (K)', 'S. Luminosity (SU)',
-                                   'S. Age (Gyrs)', 'S. RA (hrs)',
+                                   'S. [Fe/H]', 'S. Age (Gyrs)', 'S. RA (hrs)',
                                    'S. DEC (deg)', 'S. Mag from Planet',
                                    'S. Size from Planet (deg)',
                                    'P. Habitable', 'P. Habitable Class']]
