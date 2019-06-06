@@ -291,68 +291,6 @@ def s_age(h, nh):
     plt.close()
 
 
-def s_ra(h, nh):
-    """
-    Plot the distribution of confirmed exoplanets by exoplanet class vs the
-    right ascension of their parent star.
-    """
-    # plot with only habitable planets
-    plt.cla()
-    plt.subplots(figsize=(5, 5))
-    sns.swarmplot(x='P. Habitable Class', y='S. RA (hrs)', data=h,
-                  order=planets, size=3)
-    plt.xticks(rotation=-15)
-    plt.title('Distribution of Number of Habitable Planets per Class' +
-              ' vs Parent Star Right Ascension')
-    plt.savefig('s_ra_h.png', bbox_inches='tight')
-    plt.close()
-
-    # plot with only non-habitable planets
-    plt.cla()
-    plt.subplots(figsize=(20, 20))
-    sns.swarmplot(x='P. Habitable Class', y='S. RA (hrs)', data=nh,
-                  size=3)
-    plt.title('Distribution of Number of Non-Habitable Planets per Class' +
-              ' vs Parent Star Right Ascension', fontsize=30)
-    plt.xlabel('P. Habitable Class', fontsize=24)
-    plt.ylabel('S. RA (hrs)', fontsize=24)
-    plt.xticks(fontsize=16)
-    plt.yticks(fontsize=16)
-    plt.savefig('s_ra_nh.png', bbox_inches='tight')
-    plt.close()
-
-
-def s_dec(h, nh):
-    """
-    Plot the distribution of confirmed exoplanets by exoplanet class vs the
-    declination of their parent star.
-    """
-    # plot with only habitable planets
-    plt.cla()
-    plt.subplots(figsize=(5, 5))
-    sns.swarmplot(x='P. Habitable Class', y='S. DEC (deg)', data=h,
-                  order=planets, size=3)
-    plt.xticks(rotation=-15)
-    plt.title('Distribution of Number of Habitable Planets per Class' +
-              ' vs Parent Star Declination')
-    plt.savefig('s_dec_h.png', bbox_inches='tight')
-    plt.close()
-
-    # plot with only non-habitable planets
-    plt.cla()
-    plt.subplots(figsize=(15, 15))
-    sns.swarmplot(x='P. Habitable Class', y='S. DEC (deg)', data=nh,
-                  size=3)
-    plt.title('Distribution of Number of Non-Habitable Planets per Class' +
-              ' vs Parent Star Declination', fontsize=30)
-    plt.xlabel('P. Habitable Class', fontsize=24)
-    plt.ylabel('S. DEC (deg)', fontsize=24)
-    plt.xticks(fontsize=16)
-    plt.yticks(fontsize=16)
-    plt.savefig('s_dec_nh.png', bbox_inches='tight')
-    plt.close()
-
-
 def s_mag_from_planet(h, nh):
     """
     Plot the distribution of confirmed exoplanets by exoplanet class vs the
@@ -520,12 +458,6 @@ def main():
           '--- %s seconds ---' % (time.time() - start_time))
     s_age(h, nh)
     print('finished age!   ',
-          '--- %s seconds ---' % (time.time() - start_time))
-    s_ra(h, nh)
-    print('finished ra!   ',
-          '--- %s seconds ---' % (time.time() - start_time))
-    s_dec(h, nh)
-    print('finished dec!   ',
           '--- %s seconds ---' % (time.time() - start_time))
     s_mag_from_planet(h, nh)
     print('finished mag!   ',
